@@ -1,12 +1,14 @@
 package installer
 
 import (
+	"github.com/radar/setup/binsetup"
 	"github.com/radar/setup/output"
 	"github.com/radar/setup/toolversions"
 	"github.com/radar/setup/commands/install/elixir"
 	"github.com/radar/setup/commands/install/elm"
   "github.com/radar/setup/commands/install/node"
 	"github.com/radar/setup/commands/install/ruby"
+
 	"github.com/urfave/cli"
 )
 
@@ -36,6 +38,11 @@ func Run(c *cli.Context) error {
 		} else {
 			output.Fail("I don't know how to install " + k + ". You're on your own!")
 		}
+	}
+
+	err = binsetup.RunIfExists()
+	if err != nil {
+		return err
 	}
 
 	output.Success("You're all good to go!")
