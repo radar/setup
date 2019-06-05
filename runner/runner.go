@@ -6,10 +6,12 @@ import (
 	"os/exec"
 	"bufio"
 	"bytes"
+
+	"github.com/radar/setup/output"
 )
 
 func Run(command string) (output string, err error) {
-	cmd := exec.Command("elixir", "-v")
+	cmd := buildCommand(command)
 	var out bytes.Buffer
 	cmd.Stdout = &out
 	err = cmd.Run()
@@ -18,9 +20,7 @@ func Run(command string) (output string, err error) {
 }
 
 func Stream(command string) {
-	parts := strings.Split(command, " ")
-
-	cmd := exec.Command(parts[0], parts[1:]...)
+	cmd := buildCommand(command)
 	stdout, _ := cmd.StdoutPipe()
 	cmd.Start()
 	scanner := bufio.NewScanner(stdout)
@@ -38,17 +38,25 @@ func CheckForMessage(command string, text string, success action, remedy action)
 	parts := strings.Split(command, " ")
 
 	cmd := exec.Command(parts[0], parts[1:]...)
-	var out bytes.Buffer
-	cmd.Stdout = &out
+	var stdout bytes.Buffer
+	var stderr bytes.Buffer
+	cmd.Stdout = &stdout
+	cmd.Stderr = &stderr
 	err := cmd.Run()
 	if err != nil {
-		fmt.Println(out.String())
-		panic(err)
+		output.Fail("Command failed: " + command)
+		output.Info("Attempting a remedy...")
+		remedy()
 	}
 
-	if strings.Contains(out.String(), text) {
+	if strings.Contains(stdout.String(), text) {
 		remedy()
 	} else {
 		success()
 	}
+}
+
+func buildCommand(command string) *exec.Cmd {
+	parts := strings.Split(command, " ")
+	return exec.Command(parts[0], parts[1:]...)
 }

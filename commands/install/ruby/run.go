@@ -1,13 +1,12 @@
 package ruby
 
 import (
-	"bytes"
 	"io/ioutil"
-	"os/exec"
 	"regexp"
 	"strings"
 
 	"github.com/radar/setup/common/version"
+	"github.com/radar/setup/runner"
 	"github.com/urfave/cli"
 )
 
@@ -18,6 +17,9 @@ func Run(c *cli.Context) error {
 	}
 
 	checker.Compare("Ruby", remedy)
+
+	checkBundler()
+	checkDependencies()
 	return nil
 }
 
@@ -37,16 +39,13 @@ func expectedVersion() version.VersionCheckResult {
 }
 
 func actualVersion() version.VersionCheckResult {
-	cmd := exec.Command("ruby", "-v")
-	var out bytes.Buffer
-	cmd.Stdout = &out
-	err := cmd.Run()
+	output, err := runner.Run("ruby -v")
 	if err != nil {
 		return version.VersionCheckResult{"", err}
 	}
 
 	re := regexp.MustCompile(`[\d\.]{3,}`)
-	rubyVersion := strings.TrimSpace(string(re.Find([]byte(out.String()))))
+	rubyVersion := strings.TrimSpace(string(re.Find([]byte(output))))
 
 	return version.VersionCheckResult{rubyVersion, nil}
 }

@@ -27,7 +27,11 @@ func Run(c *cli.Context) error {
 
 
 	for k := range versions.Versions {
-		installers[k](c)
+		if (installers[k] != nil) {
+			installers[k](c)
+		} else {
+			output.Fail("I don't know how to install " + k + ". You're on your own!")
+		}
 }
 
 	return nil
