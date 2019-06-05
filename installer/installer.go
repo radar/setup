@@ -26,16 +26,15 @@ func Run(c *cli.Context) error {
 	installers["nodejs"] = node.Run
 	installers["ruby"] = ruby.Run
 
-
-
 	for k := range versions.Versions {
 		if (installers[k] != nil) {
 			installers[k](c)
 		} else {
 			output.Fail("I don't know how to install " + k + ". You're on your own!")
 		}
-}
+	}
+
+	output.Success("You're all good to go!")
 
 	return nil
-
 }
