@@ -11,7 +11,7 @@ func checkRuby() error {
 		PackageName: "ruby",
 		Executable: "ruby",
 		VersionCommand: "ruby -v",
-		VersionRegexp: `[\d\.]{3,}`,
+		VersionRegexp: `([\d\.]{3,})`,
 		Remedy: installViaASDF,
 	}
 
