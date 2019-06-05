@@ -19,6 +19,7 @@ func Run(c *cli.Context) error {
 	}
 
 	checker.Compare("Node", remedy)
+	checkDependencies()
 	return nil
 }
 
