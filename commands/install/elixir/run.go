@@ -7,10 +7,9 @@ import (
 	"github.com/radar/setup/runner"
 	"github.com/radar/setup/common/toolversions"
 	"github.com/radar/setup/common/version"
-	"github.com/urfave/cli"
 )
 
-func Run(c *cli.Context) error {
+func Run() error {
 	checker := version.Checker{
 		Expected: expectedVersion(),
 		Actual:   actualVersion(),

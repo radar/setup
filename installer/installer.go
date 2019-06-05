@@ -10,7 +10,7 @@ import (
 	"github.com/urfave/cli"
 )
 
-type installer func(c *cli.Context) error
+type installer func() error
 
 func Run(c *cli.Context) error {
 	versions, err := toolversions.Load()
@@ -28,7 +28,11 @@ func Run(c *cli.Context) error {
 
 	for k := range versions.Versions {
 		if (installers[k] != nil) {
-			installers[k](c)
+			err := installers[k]()
+			if err != nil {
+				return err
+			}
+
 		} else {
 			output.Fail("I don't know how to install " + k + ". You're on your own!")
 		}

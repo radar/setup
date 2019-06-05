@@ -6,7 +6,7 @@ import (
 	"github.com/radar/setup/runner"
 )
 
-func checkBundler() {
+func checkBundler() error {
 	output.Info("Checking if Bundler is installed")
 	runner.CheckForMessage(
 		"gem list -i bundler",
@@ -14,6 +14,8 @@ func checkBundler() {
 		bundlerInstalled,
 		installBundler,
 	)
+
+	return nil
 }
 
 func bundlerInstalled() {

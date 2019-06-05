@@ -5,7 +5,7 @@ import (
 	"github.com/radar/setup/runner"
 )
 
-func checkDependencies() {
+func checkDependencies() error {
 	output.Info("Checking all Bundler dependencies are installed by running 'bundle check'...")
 	runner.CheckForMessage(
 		"bundle check",
@@ -13,6 +13,8 @@ func checkDependencies() {
 		dependenciesInstalled,
 		installDependencies,
 	)
+
+	return nil
 }
 
 func dependenciesInstalled() {

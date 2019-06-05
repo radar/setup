@@ -1,10 +1,10 @@
 package main
 
 import (
+	"os"
+
 	"github.com/radar/setup/installer"
 	"github.com/urfave/cli"
-	"log"
-	"os"
 )
 
 func main() {
@@ -13,8 +13,5 @@ func main() {
 	app.Usage = "Setup your local development environment"
 	app.Action = installer.Run
 
-	err := app.Run(os.Args)
-	if err != nil {
-		log.Fatal(err)
-	}
+	app.Run(os.Args)
 }

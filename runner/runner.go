@@ -14,7 +14,11 @@ func Run(command string) (output string, err error) {
 	cmd := buildCommand(command)
 	var out bytes.Buffer
 	cmd.Stdout = &out
-	err = cmd.Run()
+	if err := cmd.Run(); err != nil {
+		if exitError, ok := err.(*exec.ExitError); ok {
+			fmt.Println(exitError.ExitCode())
+		}
+	}
 
 	return out.String(), err
 }
