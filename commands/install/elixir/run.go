@@ -22,6 +22,7 @@ func Run() error {
 	}
 
 	checkDependencies()
+	runEctoSetup()
 
 	return nil
 }
