@@ -4,6 +4,7 @@ import (
 	"github.com/radar/setup/output"
 	"github.com/radar/setup/common/toolversions"
 	"github.com/radar/setup/commands/install/elixir"
+	"github.com/radar/setup/commands/install/elm"
   "github.com/radar/setup/commands/install/node"
 	"github.com/radar/setup/commands/install/ruby"
 	"github.com/urfave/cli"
@@ -21,6 +22,7 @@ func Run(c *cli.Context) error {
 
 	installers := make(map[string]installer)
 	installers["elixir"] = elixir.Run
+	installers["elm"] = elm.Run
 	installers["nodejs"] = node.Run
 	installers["ruby"] = ruby.Run
 
