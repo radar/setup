@@ -1,47 +1,29 @@
 package node
 
 import (
-	"bytes"
-
-	"os/exec"
-	"regexp"
-	"strings"
-
-	"github.com/radar/setup/common/toolversions"
-	"github.com/radar/setup/common/version"
+	"github.com/radar/setup/tool"
 )
 
 func Run() error {
-	checker := version.Checker{
-		Expected: expectedVersion(),
-		Actual:   actualVersion(),
+	tool := tool.Tool{
+		Name: "Node",
+		PackageName: "nodejs",
+		Executable: "node",
+		VersionCommand: "node -v",
+		VersionRegexp: `([\d\.]{3,})`,
+		Remedy: installViaASDF,
 	}
 
-	checker.Compare("Node", remedy)
+	err := tool.Install()
+	if err != nil {
+		return err
+	}
+
 	checkDependencies()
+
 	return nil
 }
 
-func remedy() string {
+func installViaASDF() string {
 	return "To fix this issue, you can run \"asdf install\"."
-}
-
-func expectedVersion() version.VersionCheckResult {
-	result, err := toolversions.ForPackage("nodejs")
-	return version.VersionCheckResult{result, err}
-}
-
-func actualVersion() version.VersionCheckResult {
-	cmd := exec.Command("node", "-v")
-	var out bytes.Buffer
-	cmd.Stdout = &out
-	err := cmd.Run()
-	if err != nil {
-		return version.VersionCheckResult{"", err}
-	}
-
-	re := regexp.MustCompile(`[\d+\.]{3,}`)
-	actualVersion := strings.TrimSpace(string(re.Find([]byte(out.String()))))
-
-	return version.VersionCheckResult{actualVersion, nil}
 }

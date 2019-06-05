@@ -2,7 +2,7 @@ package installer
 
 import (
 	"github.com/radar/setup/output"
-	"github.com/radar/setup/common/toolversions"
+	"github.com/radar/setup/toolversions"
 	"github.com/radar/setup/commands/install/elixir"
 	"github.com/radar/setup/commands/install/elm"
   "github.com/radar/setup/commands/install/node"

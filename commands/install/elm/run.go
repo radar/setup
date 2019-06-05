@@ -1,21 +1,24 @@
 package elm
 
 import (
-	"regexp"
-	"strings"
-
-	"github.com/radar/setup/runner"
-	"github.com/radar/setup/common/toolversions"
-	"github.com/radar/setup/common/version"
+	"github.com/radar/setup/tool"
 )
 
 func Run() error {
-	checker := version.Checker{
-		Expected: expectedVersion(),
-		Actual:   actualVersion(),
+	tool := tool.Tool{
+		Name: "Elm",
+		PackageName: "elm",
+		Executable: "elm",
+		VersionCommand: "elm -v",
+		VersionRegexp: `([\d\.]{3,})`,
+		Remedy: installViaASDF,
 	}
 
-	checker.Compare("Elm", installViaASDF)
+	err := tool.Install()
+	if err != nil {
+		return err
+	}
+
 	checkDependencies()
 
 	return nil
@@ -23,22 +26,4 @@ func Run() error {
 
 func installViaASDF() string {
 	return "To fix this issue, you can run \"asdf install\"."
-}
-
-func expectedVersion() version.VersionCheckResult {
-	result, err := toolversions.ForPackage("elm")
-	return version.VersionCheckResult{result, err}
-}
-
-func actualVersion() version.VersionCheckResult {
-	output, err := runner.Run("elm -v")
-	if err != nil {
-		return version.VersionCheckResult{"", err}
-	}
-
-	re := regexp.MustCompile(`([\d+\.]{3,})`)
-  match := re.FindSubmatch([]byte(output))
-	actualVersion := strings.TrimSpace(string(match[1]))
-
-	return version.VersionCheckResult{actualVersion, nil}
 }

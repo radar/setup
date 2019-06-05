@@ -60,6 +60,12 @@ func CheckForMessage(command string, text string, success action, remedy action)
 	}
 }
 
+func LookPath(command string) error {
+	parts := strings.Split(command, " ")
+	_, err := exec.LookPath(parts[0])
+	return err
+}
+
 func buildCommand(command string) *exec.Cmd {
 	parts := strings.Split(command, " ")
 	return exec.Command(parts[0], parts[1:]...)

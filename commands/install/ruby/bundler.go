@@ -19,7 +19,7 @@ func checkBundler() error {
 }
 
 func bundlerInstalled() {
-	output.Success("Ruby dependencies are installed.")
+	output.Success("Bundler is installed.")
 }
 
 func installBundler() {
