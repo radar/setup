@@ -4,6 +4,8 @@ This tool can be used to setup local development environments. **This is only a 
 
 Setup is clever enough to inspect the directory structure of your application and determine what things should be installed.
 
+![Setup in action](/doc/install.png)
+
 ## Elixir
 
 Within an Elixir project with a `.tool-versions` file like this:
