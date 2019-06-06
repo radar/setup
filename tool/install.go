@@ -71,7 +71,7 @@ func (tool Tool) findExecutable() error {
 }
 
 func (tool Tool) ensureInstalled(attempted bool) error {
-	asdfTool := asdf.ListVersions(tool.Name)
+	asdfTool := asdf.ListVersions(tool.PackageName)
 	if asdfTool.CheckInstalled(tool.ExpectedVersion) {
 		return nil
 	}
@@ -82,9 +82,7 @@ func (tool Tool) ensureInstalled(attempted bool) error {
 		output.Fail("Prior installation attempt failed. Please try it yourself with 'asdf install'")
 		return errors.New(fmt.Sprintf("Could not install %s (%s)", tool.Name, tool.ExpectedVersion))
 	}
-	output.Info("Attempting installation:")
-	output.Info("$ asdf install")
-	runner.Stream("asdf install")
+	asdfTool.Install(tool.ExpectedVersion)
 
 	return 	tool.ensureInstalled(true)
 }

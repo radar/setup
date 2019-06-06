@@ -1,12 +1,15 @@
 package asdf
 
 import (
+	"fmt"
 	"strings"
 
+	"github.com/radar/setup/output"
 	"github.com/radar/setup/runner"
 )
 
 type Tool struct {
+	Name string
 	Versions []string
 }
 
@@ -20,6 +23,7 @@ func ListVersions(tool string) Tool {
 	}
 
 	return Tool{
+		Name: tool,
 		Versions: versions,
 	}
 }
@@ -31,4 +35,11 @@ func (t Tool) CheckInstalled(expectedVersion string) bool {
         }
     }
     return false
+}
+
+func (t Tool) Install(version string ) {
+	installCommand := fmt.Sprintf("asdf install %s %s", t.Name, version)
+	output.Info("Attempting installation:")
+	output.Info("$ " + installCommand)
+	runner.Stream(installCommand)
 }
