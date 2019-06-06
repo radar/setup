@@ -90,7 +90,6 @@ func (tool Tool) ensureInstalled(attempted bool) error {
 }
 
 func (tool Tool) actualVersion() (string, error) {
-	fmt.Println(tool.VersionCommand)
 	stdout, stderr, err := runner.Run(tool.VersionCommand)
 	if err != nil {
 		return stderr, err
