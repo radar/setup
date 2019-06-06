@@ -6,6 +6,7 @@ import (
 	"github.com/radar/setup/toolversions"
 	"github.com/radar/setup/commands/install/elixir"
 	"github.com/radar/setup/commands/install/elm"
+	"github.com/radar/setup/commands/install/golang"
   "github.com/radar/setup/commands/install/node"
 	"github.com/radar/setup/commands/install/ruby"
 
@@ -15,6 +16,28 @@ import (
 type installer func() error
 
 func Run(c *cli.Context) error {
+	err := installTools()
+	if err != nil {
+		return err
+	}
+
+	err = installGo()
+	if err != nil {
+		return err
+	}
+
+	err = runBinSetup()
+	if err != nil {
+		return err
+	}
+
+
+	output.Success("You're all good to go!")
+
+	return nil
+}
+
+func installTools() error {
 	versions, err := toolversions.Load()
 	if err != nil {
 		return err
@@ -25,6 +48,7 @@ func Run(c *cli.Context) error {
 	installers := make(map[string]installer)
 	installers["elixir"] = elixir.Run
 	installers["elm"] = elm.Run
+	installers["golang"] = golang.Run
 	installers["nodejs"] = node.Run
 	installers["ruby"] = ruby.Run
 
@@ -40,12 +64,22 @@ func Run(c *cli.Context) error {
 		}
 	}
 
-	err = binsetup.RunIfExists()
+	return nil
+}
+
+func installGo() error {
+	if golang.Used() {
+		return golang.Run()
+	}
+
+	return nil
+}
+
+func runBinSetup() error {
+	err := binsetup.RunIfExists()
 	if err != nil {
 		return err
 	}
-
-	output.Success("You're all good to go!")
 
 	return nil
 }

@@ -1,10 +1,12 @@
 package tool
 
 import (
+	"errors"
 	"fmt"
 	"regexp"
 	"strings"
 
+	"github.com/radar/setup/asdf"
 	"github.com/radar/setup/toolversions"
 	"github.com/radar/setup/output"
 	"github.com/radar/setup/runner"
@@ -15,6 +17,7 @@ type Tool struct {
 	Name string
 	PackageName string
 	Executable string
+	ExpectedVersion string
 	VersionCommand string
 	VersionRegexp string
 	Remedy (func() string)
@@ -27,11 +30,15 @@ func (tool Tool) Install() error {
 	}
 
 	output.Found(fmt.Sprintf("Found %s (%s) in .tool-versions", tool.Name, expectedVersion))
+	tool.ExpectedVersion = expectedVersion
 
-	err = runner.LookPath(tool.VersionCommand)
+	err = tool.findExecutable()
 	if err != nil {
-		output.Fail(fmt.Sprintf("Could not find % executable in PATH", tool.Executable))
-		output.Info(tool.Remedy())
+		return err
+	}
+
+	err = tool.ensureInstalled(false)
+	if err != nil {
 		return err
 	}
 
@@ -52,14 +59,45 @@ func (tool Tool) Install() error {
 	return nil
 }
 
-func (tool Tool) actualVersion() (string, error) {
-	output, err := runner.Run(tool.VersionCommand)
+func (tool Tool) findExecutable() error {
+	err := runner.LookPath(tool.VersionCommand)
 	if err != nil {
-		return output, err
+		output.Fail(fmt.Sprintf("Could not find % executable in PATH", tool.Executable))
+		output.Info(tool.Remedy())
+		return err
+	}
+
+	return nil
+}
+
+func (tool Tool) ensureInstalled(attempted bool) error {
+	asdfTool := asdf.ListVersions(tool.Name)
+	if asdfTool.CheckInstalled(tool.ExpectedVersion) {
+		return nil
+	}
+
+	errorMsg := fmt.Sprintf("You do not have %s (%s) installed.", tool.Name, tool.ExpectedVersion)
+	output.Fail(errorMsg)
+	if (attempted) {
+		output.Fail("Prior installation attempt failed. Please try it yourself with 'asdf install'")
+		return errors.New(fmt.Sprintf("Could not install %s (%s)", tool.Name, tool.ExpectedVersion))
+	}
+	output.Info("Attempting installation:")
+	output.Info("$ asdf install")
+	runner.Stream("asdf install")
+
+	return 	tool.ensureInstalled(true)
+}
+
+func (tool Tool) actualVersion() (string, error) {
+	fmt.Println(tool.VersionCommand)
+	stdout, stderr, err := runner.Run(tool.VersionCommand)
+	if err != nil {
+		return stderr, err
 	}
 
 	re := regexp.MustCompile(tool.VersionRegexp)
-	match := re.FindSubmatch([]byte(output))
+	match := re.FindSubmatch([]byte(stdout))
 	rubyVersion := strings.TrimSpace(string(match[1]))
 
 	return rubyVersion, nil
