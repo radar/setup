@@ -37,3 +37,9 @@ func installDependencies() {
 	runner.Stream("mix hex.local --if-missing")
 	runner.Stream("mix deps.get")
 }
+
+func mixCompile() {
+	output.Info("Ensuring things are compiled...")
+	output.Info("$ mix compile")
+	runner.Stream("mix compile")
+}

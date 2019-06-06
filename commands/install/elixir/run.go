@@ -22,6 +22,7 @@ func Run() error {
 	}
 
 	checkDependencies()
+	mixCompile()
 	runEctoSetup()
 
 	return nil
