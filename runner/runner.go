@@ -10,17 +10,18 @@ import (
 	"github.com/radar/setup/output"
 )
 
-func Run(command string) (output string, err error) {
+func Run(command string) (string, string, error) {
 	cmd := buildCommand(command)
-	var out bytes.Buffer
-	cmd.Stdout = &out
+	var stdout, stderr bytes.Buffer
+	cmd.Stdout = &stdout
+	cmd.Stderr = &stderr
 	if err := cmd.Run(); err != nil {
-		if exitError, ok := err.(*exec.ExitError); ok {
-			fmt.Println(exitError.ExitCode())
+		if _, ok := err.(*exec.ExitError); ok {
+			return stdout.String(), stderr.String(), err
 		}
 	}
 
-	return out.String(), err
+	return stdout.String(), stderr.String(), nil
 }
 
 func Stream(command string) {
