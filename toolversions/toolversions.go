@@ -11,6 +11,9 @@ type Versions struct {
 	Versions map[string]string
 }
 
+const toolVersions = ".tool-versions"
+
+
 func ForPackage(pkg string) (string, error) {
 	versions, err := Load()
 	if err != nil {
@@ -23,8 +26,16 @@ func (versions Versions) forPackage(pkg string) (string, error) {
 	return versions.Versions[pkg], nil
 }
 
+func Present() bool {
+	if _, err := os.Stat(toolVersions); os.IsNotExist(err) {
+		return false
+	}
+
+	return true
+}
+
 func Load() (Versions, error) {
-	f, err := os.Open(".tool-versions")
+	f, err := os.Open(toolVersions)
 	versions := Versions{Versions: make(map[string]string)}
 
 	if err != nil {

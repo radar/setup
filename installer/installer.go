@@ -16,9 +16,13 @@ import (
 type installer func() error
 
 func Run(c *cli.Context) error {
-	err := installTools()
-	if err != nil {
-		return err
+	var err error
+
+	if toolversions.Present() {
+		err = installTools()
+		if err != nil {
+			return err
+		}
 	}
 
 	err = installGo()
@@ -38,6 +42,7 @@ func Run(c *cli.Context) error {
 }
 
 func installTools() error {
+
 	versions, err := toolversions.Load()
 	if err != nil {
 		return err
