@@ -18,15 +18,17 @@ func checkBundler() error {
 	return nil
 }
 
-func bundlerInstalled() {
+func bundlerInstalled() error {
 	output.Success("Bundler is installed.")
+	return nil
 }
 
-func installBundler() {
+func installBundler() error {
 	installCommand := "bundle install"
 
 	output.Fail("Bundler is missing.")
 	output.Info("Installing it with: ")
 	output.Info("$ " + installCommand)
 	runner.Stream(installCommand)
+	return nil
 }

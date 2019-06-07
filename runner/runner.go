@@ -10,6 +10,11 @@ import (
 	"github.com/radar/setup/output"
 )
 
+func StreamWithInfo(command string) {
+	output.Info("$ " + command)
+	Stream(command)
+}
+
 func Run(command string) (string, string, error) {
 	cmd := buildCommand(command)
 	var stdout, stderr bytes.Buffer
@@ -37,17 +42,10 @@ func Stream(command string) {
 	cmd.Wait()
 }
 
-type action func()
+type action func() error
 
 func CheckForMessage(command string, text string, success action, remedy action) {
-	parts := strings.Split(command, " ")
-
-	cmd := exec.Command(parts[0], parts[1:]...)
-	var stdout bytes.Buffer
-	var stderr bytes.Buffer
-	cmd.Stdout = &stdout
-	cmd.Stderr = &stderr
-	err := cmd.Run()
+	stdout, _, err := attemptCommand(command)
 	if err != nil {
 		output.Fail("Command failed: " + command)
 		output.Info("Attempting a remedy...")
@@ -61,6 +59,15 @@ func CheckForMessage(command string, text string, success action, remedy action)
 	}
 }
 
+func OptionalAction(command string, success action, fail action) error {
+	_, _, err := attemptCommand(command)
+	if err != nil {
+		return fail()
+	} else {
+		return success()
+	}
+}
+
 func LookPath(command string) error {
 	parts := strings.Split(command, " ")
 	_, err := exec.LookPath(parts[0])
@@ -70,4 +77,14 @@ func LookPath(command string) error {
 func buildCommand(command string) *exec.Cmd {
 	parts := strings.Split(command, " ")
 	return exec.Command(parts[0], parts[1:]...)
+}
+
+func attemptCommand(command string) (stdout bytes.Buffer, stderr bytes.Buffer, err error) {
+	parts := strings.Split(command, " ")
+
+	cmd := exec.Command(parts[0], parts[1:]...)
+	cmd.Stdout = &stdout
+	cmd.Stderr = &stderr
+	err = cmd.Run()
+	return stdout, stderr, err
 }

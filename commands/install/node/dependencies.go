@@ -15,12 +15,14 @@ func checkDependencies() {
 	)
 }
 
-func dependenciesInstalled() {
+func dependenciesInstalled() error {
 	output.Success("Node dependencies are installed.")
+	return nil
 }
 
-func installDependencies() {
+func installDependencies() error {
 	output.Fail("Node packages are missing.")
 	output.Info("Attempting installation with:")
 	output.Info("$ yarn install")
+	return nil
 }

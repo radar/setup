@@ -17,15 +17,18 @@ func checkDependencies() error {
 	return nil
 }
 
-func dependenciesInstalled() {
+func dependenciesInstalled() error {
 	output.Success("Bundler dependencies are installed.")
+	return nil
 }
 
-func installDependencies() {
+func installDependencies() error {
 	output.Fail("Gems are missing.")
 	output.Info("Attempting installation with:")
 
 	installCommand := "bundle install"
 	output.Info("$ " + installCommand)
 	runner.Stream(installCommand)
+
+	return nil
 }
