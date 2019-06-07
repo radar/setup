@@ -7,14 +7,17 @@ import (
 	"github.com/radar/setup/runner"
 )
 
-func checkDependencies() {
+func mixFileExists() bool {
 	if _, err := os.Stat("mix.exs"); os.IsNotExist(err) {
 		output.Skip("mix.exs does not exist. Skipping dependency installation.")
-		return
+		return false
 	} else {
 		output.Success("mix.exs exists. Will attempt dependency installation.")
+		return true
 	}
+}
 
+func checkDependencies() {
 	output.Info("Checking all dependencies are installed by running 'mix deps'...")
 	runner.CheckForMessage(
 		"mix deps",
@@ -24,18 +27,18 @@ func checkDependencies() {
 	)
 }
 
-func dependenciesInstalled() {
+func dependenciesInstalled() error {
 	output.Success("Elixir dependencies are installed.")
+	return nil
 }
 
-func installDependencies() {
+func installDependencies() error {
 	output.Fail("Hex packages are missing.")
 	output.Info("Attempting installation with:")
-	output.Info("$ mix hex.local --if-missing")
-	output.Info("$ mix deps.get")
+	runner.StreamWithInfo("mix hex.local --if-missing")
+	runner.StreamWithInfo("mix deps.get")
 
-	runner.Stream("mix hex.local --if-missing")
-	runner.Stream("mix deps.get")
+	return nil
 }
 
 func mixCompile() {

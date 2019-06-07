@@ -21,9 +21,11 @@ func Run() error {
 		return err
 	}
 
-	checkDependencies()
-	mixCompile()
-	runEctoSetup()
+	if mixFileExists() {
+		checkDependencies()
+		mixCompile()
+		runEctoSetup()
+	}
 
 	return nil
 }
