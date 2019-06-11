@@ -6,6 +6,7 @@ func Run() error {
 		checkBundler,
 		checkDependencies,
 		checkForMongoid,
+		checkForPG,
 	}
 
 	for _, step := range steps {
