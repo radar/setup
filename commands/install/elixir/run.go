@@ -13,13 +13,15 @@ func Run() error {
 		Executable: "elixir",
 		VersionCommand: "elixir -v",
 		VersionRegexp: `Elixir ([\d\.]{3,})`,
-		Remedy: installViaASDF,
 	}
 
 	err := tool.Install()
 	if err != nil {
 		return err
 	}
+
+	ensureHexPresent()
+	ensureRebarPresent()
 
 	if mixFileExists() {
 		checkDependencies()
@@ -28,8 +30,4 @@ func Run() error {
 	}
 
 	return nil
-}
-
-func installViaASDF() string {
-	return "To fix this issue, you can run \"asdf install\"."
 }

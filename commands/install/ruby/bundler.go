@@ -4,9 +4,14 @@ package ruby
 import (
 	"github.com/radar/setup/output"
 	"github.com/radar/setup/runner"
+	"github.com/radar/setup/utils"
 )
 
 func checkBundler() error {
+	if !utils.FileExists("Gemfile") {
+		return nil
+	}
+
 	output.Info("Checking if Bundler is installed")
 	runner.CheckForMessage(
 		"gem list -i bundler",

@@ -1,6 +1,7 @@
 package asdf
 
 import (
+	"errors"
 	"fmt"
 	"strings"
 
@@ -13,8 +14,57 @@ type Tool struct {
 	Versions []string
 }
 
-func ListVersions(tool string) Tool {
-	listOutput, _, _ := runner.Run("asdf list " + tool)
+func CheckInstallation(name string, expectedVersion string) error {
+	tool := Tool{Name: name}
+
+	if !tool.checkForPlugin() {
+		output.Fail(fmt.Sprintf("Could not find the %s plugin for asdf", tool.Name))
+		tool.installPlugin()
+	}
+
+	tool.ensureInstalled(expectedVersion, false)
+
+	return nil
+}
+
+func (tool Tool) installPlugin() {
+	output.Info(fmt.Sprintf("Adding plugin for %s to asdf.", tool.Name))
+	runner.StreamWithInfo("asdf plugin-add " + tool.Name)
+}
+
+func (tool Tool) ensureInstalled(expectedVersion string, attempted bool) error {
+	asdfTool := tool.listVersions()
+	if asdfTool.CheckInstalled(expectedVersion) {
+		return nil
+	}
+
+	errorMsg := fmt.Sprintf("You do not have %s (%s) installed.", tool.Name, expectedVersion)
+	output.Fail(errorMsg)
+	if (attempted) {
+		output.Fail("Prior installation attempt failed. Please try it yourself with 'asdf install'")
+		return errors.New(fmt.Sprintf("Could not install %s (%s)", tool.Name, expectedVersion))
+	}
+	asdfTool.Install(expectedVersion)
+
+	return tool.ensureInstalled(expectedVersion, true)
+}
+
+func (tool Tool) checkForPlugin() bool {
+	pluginListOutput, _, _ := runner.Run("asdf plugin-list")
+	plugins := strings.Split(strings.TrimSpace(pluginListOutput), "\n")
+	pluginInstalled := false
+
+	for _, plugin := range plugins {
+		if tool.Name == plugin {
+			pluginInstalled = true
+		}
+	}
+
+	return pluginInstalled
+}
+
+func (tool Tool) listVersions() Tool {
+	listOutput, _, _ := runner.Run("asdf list " + tool.Name)
 	rawVersions := strings.Split(strings.TrimSpace(listOutput), "\n")
 
 	versions := make([]string, len(rawVersions))
@@ -22,10 +72,8 @@ func ListVersions(tool string) Tool {
 			versions[i] = strings.TrimSpace(v)
 	}
 
-	return Tool{
-		Name: tool,
-		Versions: versions,
-	}
+	tool.Versions = versions
+	return tool
 }
 
 func (t Tool) CheckInstalled(expectedVersion string) bool {

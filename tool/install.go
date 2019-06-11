@@ -1,7 +1,6 @@
 package tool
 
 import (
-	"errors"
 	"fmt"
 	"regexp"
 	"strings"
@@ -20,7 +19,6 @@ type Tool struct {
 	ExpectedVersion string
 	VersionCommand string
 	VersionRegexp string
-	Remedy (func() string)
 }
 
 func (tool Tool) Install() error {
@@ -32,15 +30,9 @@ func (tool Tool) Install() error {
 	output.Found(fmt.Sprintf("Found %s (%s) in .tool-versions", tool.Name, expectedVersion))
 	tool.ExpectedVersion = expectedVersion
 
-	err = tool.findExecutable()
-	if err != nil {
-		return err
-	}
+	tool.findExecutable()
+	err = asdf.CheckInstallation(tool.PackageName, expectedVersion)
 
-	err = tool.ensureInstalled(false)
-	if err != nil {
-		return err
-	}
 
 	actualVersion, err := tool.actualVersion()
 	if err != nil {
@@ -51,7 +43,8 @@ func (tool Tool) Install() error {
 		expectedVersion,
 		actualVersion,
 	}
-	err = checker.Compare(tool.Name, tool.Remedy)
+
+	err = checker.Compare(tool.Name)
 	if err != nil {
 		return err
 	}
@@ -62,29 +55,11 @@ func (tool Tool) Install() error {
 func (tool Tool) findExecutable() error {
 	err := runner.LookPath(tool.VersionCommand)
 	if err != nil {
-		output.Fail(fmt.Sprintf("Could not find % executable in PATH", tool.Executable))
-		output.Info(tool.Remedy())
+		output.Fail(fmt.Sprintf("Could not find %s executable in PATH", tool.Executable))
 		return err
 	}
 
 	return nil
-}
-
-func (tool Tool) ensureInstalled(attempted bool) error {
-	asdfTool := asdf.ListVersions(tool.PackageName)
-	if asdfTool.CheckInstalled(tool.ExpectedVersion) {
-		return nil
-	}
-
-	errorMsg := fmt.Sprintf("You do not have %s (%s) installed.", tool.Name, tool.ExpectedVersion)
-	output.Fail(errorMsg)
-	if (attempted) {
-		output.Fail("Prior installation attempt failed. Please try it yourself with 'asdf install'")
-		return errors.New(fmt.Sprintf("Could not install %s (%s)", tool.Name, tool.ExpectedVersion))
-	}
-	asdfTool.Install(tool.ExpectedVersion)
-
-	return 	tool.ensureInstalled(true)
 }
 
 func (tool Tool) actualVersion() (string, error) {

@@ -12,12 +12,7 @@ func checkRuby() error {
 		Executable: "ruby",
 		VersionCommand: "ruby -v",
 		VersionRegexp: `([\d\.]{3,})`,
-		Remedy: installViaASDF,
 	}
 
 	return tool.Install()
-}
-
-func installViaASDF() string {
-	return "To fix this issue, you can run \"asdf install\"."
 }

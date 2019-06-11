@@ -11,7 +11,6 @@ func Run() error {
 		Executable: "elm",
 		VersionCommand: "elm -v",
 		VersionRegexp: `([\d\.]{3,})`,
-		Remedy: installViaASDF,
 	}
 
 	err := tool.Install()
@@ -22,8 +21,4 @@ func Run() error {
 	checkDependencies()
 
 	return nil
-}
-
-func installViaASDF() string {
-	return "To fix this issue, you can run \"asdf install\"."
 }
