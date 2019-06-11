@@ -6,7 +6,7 @@ import (
 
 const versionCommand = "elixir -v"
 
-func Run() error {
+func Run() (err error) {
 	tool := tool.Tool{
 		Name: "Elixir",
 		PackageName: "elixir",
@@ -15,7 +15,17 @@ func Run() error {
 		VersionRegexp: `Elixir ([\d\.]{3,})`,
 	}
 
-	err := tool.Install()
+	err = tool.SetExpectedVersion()
+	if err != nil {
+		return err
+	}
+
+	err = checkForErlang()
+	if err != nil {
+		return err
+	}
+
+	err = tool.Install()
 	if err != nil {
 		return err
 	}

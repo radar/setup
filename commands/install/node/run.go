@@ -4,7 +4,7 @@ import (
 	"github.com/radar/setup/tool"
 )
 
-func Run() error {
+func Run() (err error) {
 	tool := tool.Tool{
 		Name: "Node",
 		PackageName: "nodejs",
@@ -13,7 +13,13 @@ func Run() error {
 		VersionRegexp: `([\d\.]{3,})`,
 	}
 
-	err := tool.Install()
+
+	err = tool.SetExpectedVersion()
+	if err != nil {
+		return err
+	}
+
+	err = tool.Install()
 	if err != nil {
 		return err
 	}

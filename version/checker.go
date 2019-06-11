@@ -10,8 +10,6 @@ type Checker struct {
 	Expected, Actual string
 }
 
-type remedy func() (string)
-
 func (c Checker) Compare(name string) error {
 	if c.equal() {
 		output.Success(fmt.Sprintf("Correct %s version installed (%s)", name, c.Expected))

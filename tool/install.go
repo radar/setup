@@ -21,7 +21,7 @@ type Tool struct {
 	VersionRegexp string
 }
 
-func (tool Tool) Install() error {
+func (tool *Tool) SetExpectedVersion() error {
 	expectedVersion, err := toolversions.ForPackage(tool.PackageName)
 	if err != nil {
 		return err
@@ -30,8 +30,12 @@ func (tool Tool) Install() error {
 	output.Found(fmt.Sprintf("Found %s (%s) in .tool-versions", tool.Name, expectedVersion))
 	tool.ExpectedVersion = expectedVersion
 
+	return nil
+}
+
+func (tool Tool) Install() error {
 	tool.findExecutable()
-	err = asdf.CheckInstallation(tool.PackageName, expectedVersion)
+	err := asdf.CheckInstallation(tool.PackageName, tool.ExpectedVersion)
 
 
 	actualVersion, err := tool.actualVersion()
@@ -40,7 +44,7 @@ func (tool Tool) Install() error {
 	}
 
 	checker := version.Checker{
-		expectedVersion,
+		tool.ExpectedVersion,
 		actualVersion,
 	}
 
