@@ -23,6 +23,6 @@ func dependenciesInstalled() error {
 func installDependencies() error {
 	output.Fail("Node packages are missing.")
 	output.Info("Attempting installation with:")
-	output.Info("$ yarn install")
+	runner.StreamWithInfo("yarn install")
 	return nil
 }
