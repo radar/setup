@@ -13,8 +13,10 @@ builds:
     - macos
   binary: setup
 archives:
-- replacements:
-    darwin: Darwin
+  -
+    name_template: '{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}'
+    replacements:
+      darwin: Darwin
 # checksum:
 #   name_template: 'checksums.txt'
 snapshot:
