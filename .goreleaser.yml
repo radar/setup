@@ -9,11 +9,6 @@ before:
 builds:
 - env:
   - CGO_ENABLED=0
-  goos:
-    - macos
-  binary: setup
-# checksum:
-#   name_template: 'checksums.txt'
 snapshot:
   name_template: "{{ .Tag }}-next"
 changelog:
