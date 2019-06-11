@@ -5,6 +5,8 @@ import (
 
 	"os"
 	"strings"
+
+	"github.com/radar/setup/utils"
 )
 
 type Versions struct {
@@ -27,11 +29,7 @@ func (versions Versions) forPackage(pkg string) (string, error) {
 }
 
 func Present() bool {
-	if _, err := os.Stat(toolVersions); os.IsNotExist(err) {
-		return false
-	}
-
-	return true
+	return utils.FileExists(toolVersions)
 }
 
 func Load() (Versions, error) {

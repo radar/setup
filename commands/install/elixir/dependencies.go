@@ -1,19 +1,18 @@
 package elixir
 
 import (
-	"os"
-
 	"github.com/radar/setup/output"
 	"github.com/radar/setup/runner"
+	"github.com/radar/setup/utils"
 )
 
 func mixFileExists() bool {
-	if _, err := os.Stat("mix.exs"); os.IsNotExist(err) {
-		output.Skip("mix.exs does not exist. Skipping dependency installation.")
-		return false
-	} else {
+	if utils.FileExists("mix.exs") {
 		output.Success("mix.exs exists. Will attempt dependency installation.")
 		return true
+	} else {
+		output.Skip("mix.exs does not exist. Skipping dependency installation.")
+		return false
 	}
 }
 
