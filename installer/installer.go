@@ -23,6 +23,11 @@ func Run(c *cli.Context) error {
 		if err != nil {
 			return err
 		}
+	} else {
+		output.Info("Could not find a .tool-versions file")
+		output.Info("Setup uses .tool-versions to determine what languages to install.")
+		output.Info("Please follow the ASDF instructions for creating a .tool-versions file.")
+		output.Info("https://asdf-vm.com/#/core-configuration?id=tool-versions")
 	}
 
 	err = installGo()
@@ -42,7 +47,6 @@ func Run(c *cli.Context) error {
 }
 
 func installTools() error {
-
 	versions, err := toolversions.Load()
 	if err != nil {
 		return err
