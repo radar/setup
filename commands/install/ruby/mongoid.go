@@ -35,7 +35,6 @@ func mongoNotRunning() error {
 
 
 func forgetAboutMongo() error {
-	output.Skip("Could not find Mongoid in the bundle")
 	// Mongoid not found, so let's not worry
 	return nil
 }
