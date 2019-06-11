@@ -4,6 +4,8 @@ import (
 	"github.com/radar/setup/binsetup"
 	"github.com/radar/setup/output"
 	"github.com/radar/setup/toolversions"
+	"github.com/radar/setup/homebrew"
+
 	"github.com/radar/setup/commands/install/elixir"
 	"github.com/radar/setup/commands/install/elm"
 	"github.com/radar/setup/commands/install/golang"
@@ -17,6 +19,11 @@ type installer func() error
 
 func Run(c *cli.Context) error {
 	var err error
+
+	err = homebrew.Bundle()
+	if err != nil {
+		return err
+	}
 
 	if toolversions.Present() {
 		err = installTools()
