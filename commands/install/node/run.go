@@ -11,7 +11,6 @@ func Run() (err error) {
 		Executable: "node",
 		VersionCommand: "node -v",
 		VersionRegexp: `([\d\.]{3,})`,
-		Sources: []tool.Source{tool.NVM, tool.ASDF},
 	}
 
 	err = tool.SetExpectedVersion()
