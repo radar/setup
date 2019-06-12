@@ -15,12 +15,11 @@ var (
 )
 
 func main() {
-
-	fmt.Println(fmt.Sprintf("%v, commit %v, built at %v", version, commit, date))
 	app := cli.NewApp()
 	app.Name = "setup"
 	app.Usage = "Setup your local development environment"
 	app.Action = installer.Run
+	app.Version = fmt.Sprintf("%v, commit %v", version, commit)
 
 	app.Run(os.Args)
 }
