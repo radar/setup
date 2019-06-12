@@ -26,6 +26,8 @@ brew:
   # Default to project name
   name: setup
 
+  folder: Formula
+
   github:
     owner: radar
     name: setup-homebrew-tap
