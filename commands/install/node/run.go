@@ -11,8 +11,8 @@ func Run() (err error) {
 		Executable: "node",
 		VersionCommand: "node -v",
 		VersionRegexp: `([\d\.]{3,})`,
+		Sources: []tool.Source{tool.NVM, tool.ASDF},
 	}
-
 
 	err = tool.SetExpectedVersion()
 	if err != nil {
@@ -24,6 +24,7 @@ func Run() (err error) {
 		return err
 	}
 
+	checkForYarn()
 	checkDependencies()
 
 	return nil

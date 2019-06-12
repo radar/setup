@@ -13,6 +13,7 @@ func Run() (err error) {
 		Executable: "elixir",
 		VersionCommand: "elixir -v",
 		VersionRegexp: `Elixir ([\d\.]{3,})`,
+		Sources: []tool.Source{tool.ASDF},
 	}
 
 	err = tool.SetExpectedVersion()
