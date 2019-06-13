@@ -16,9 +16,8 @@ func runEctoSetup() error {
 	}
 
 	if strings.Contains(mixHelpStdout, "ecto.setup") {
-		output.Found("Found ecto.setup Mix task. Running it to ensure database is setup:")
-		output.Info("$ " + ectoSetupCommand)
-		runner.Stream(ectoSetupCommand)
+		output.Found("Found ecto.setup Mix task. Running it to ensure database is setup:", 4)
+		runner.StreamWithInfo(ectoSetupCommand, 6)
 	}
 
 	return nil

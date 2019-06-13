@@ -8,8 +8,8 @@ import (
 
 func Bundle() error {
 	if utils.FileExists("Brewfile") {
-		output.Found("Found a Brewfile!")
-		output.Info("Checking Brewfile dependencies are installed...")
+		output.Found("Found a Brewfile!", 0)
+		output.Info("Checking Brewfile dependencies are installed...", 2)
 		installBundle()
 	}
 
@@ -21,13 +21,13 @@ func installBundle() {
 }
 
 func bundleInstalled() error {
-	output.Success("Homebrew bundle installed.")
+	output.Success("Homebrew bundle installed.", 4)
 	return nil
 }
 
 func bundleNotInstalled() error {
-	output.Info("Homebrew bundle not installed. Installing...")
-	runner.StreamWithInfo("brew bundle install -v")
+	output.Info("Homebrew bundle not installed. Installing...", 4)
+	runner.StreamWithInfo("brew bundle install -v", 4)
 	installBundle()
 
 	return nil

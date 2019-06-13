@@ -7,7 +7,6 @@ import (
 
 func checkDependencies() {
 	installCommand := "elm-package install --yes"
-	output.Info("Checking all Elm dependencies are installed by running:")
-	output.Info("$ " + installCommand)
-	runner.Run(installCommand)
+	output.Info("Checking all Elm dependencies are installed by running:", 2)
+	runner.StreamWithInfo(installCommand, 2)
 }

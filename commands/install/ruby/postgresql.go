@@ -12,22 +12,22 @@ func checkForPG() error {
 }
 
 func checkForPostgresql() error {
-	output.Found("Found pg in the bundle.")
-	output.Info("Checking PostgreSQL server is running...")
+	output.Found("Found pg in the bundle.", 6)
+	output.Info("Checking PostgreSQL server is running...", 8)
 
 	return runner.OptionalAction("nc -z localhost 5432", pgRunning, pgNotRunning)
 }
 
 func pgRunning() error {
-	output.Success("PostgreSQL is up and running at localhost:5432.")
+	output.Success("PostgreSQL is up and running at localhost:5432.", 10)
 	return nil
 }
 
 
 func pgNotRunning() error {
-	output.Fail("PostgreSQL is not running at localhost:5432.")
-	output.Info("You may be able to start it with:")
-	output.Info("$ brew services start postgresql")
+	output.Fail("PostgreSQL is not running at localhost:5432.", 10)
+	output.Info("You may be able to start it with:", 10)
+	output.Info("$ brew services start postgresql", 10)
 
 	return errors.New("PostgreSQL is not running.")
 }

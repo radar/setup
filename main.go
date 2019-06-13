@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/apex/log"
+	apexCli "github.com/apex/log/handlers/cli"
 	"github.com/radar/setup/installer"
 	"github.com/urfave/cli"
 )
@@ -15,6 +17,8 @@ var (
 )
 
 func main() {
+	log.SetHandler(apexCli.Default)
+
 	app := cli.NewApp()
 	app.Name = "setup"
 	app.Usage = "Setup your local development environment"

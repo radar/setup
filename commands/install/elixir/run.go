@@ -1,6 +1,7 @@
 package elixir
 
 import (
+	"github.com/radar/setup/output"
 	"github.com/radar/setup/tool"
 )
 
@@ -13,7 +14,6 @@ func Run() (err error) {
 		Executable: "elixir",
 		VersionCommand: "elixir -v",
 		VersionRegexp: `Elixir ([\d\.]{3,})`,
-		Sources: []tool.Source{tool.ASDF},
 	}
 
 	err = tool.SetExpectedVersion()
@@ -25,6 +25,8 @@ func Run() (err error) {
 	if err != nil {
 		return err
 	}
+
+	output.Separator()
 
 	err = tool.Install()
 	if err != nil {

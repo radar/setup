@@ -12,7 +12,7 @@ func checkBundler() error {
 		return nil
 	}
 
-	output.Info("Checking if Bundler is installed")
+	output.Info("Checking if Bundler is installed", 4)
 	runner.CheckForMessage(
 		"gem list -i bundler",
 		"false",
@@ -24,16 +24,15 @@ func checkBundler() error {
 }
 
 func bundlerInstalled() error {
-	output.Success("Bundler is installed.")
+	output.Success("Bundler is installed.", 6)
 	return nil
 }
 
 func installBundler() error {
 	installCommand := "bundle install"
 
-	output.Fail("Bundler is missing.")
-	output.Info("Installing it with: ")
-	output.Info("$ " + installCommand)
-	runner.Stream(installCommand)
+	output.Fail("Bundler is missing.", 6)
+	output.Info("Installing it with: ", 8)
+	runner.StreamWithInfo(installCommand, 8)
 	return nil
 }

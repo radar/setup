@@ -15,20 +15,20 @@ func RunIfExists() error {
 		return nil
 	}
 
-	output.Found("Found a bin/setup script.")
+	output.Found("Found a bin/setup script.", 2)
 
 	if (stat.Size() == 0) {
-		output.Info("But bin/setup is empty! I'll ignore it.")
+		output.Info("But bin/setup is empty! I'll ignore it.", 4)
 		return nil
 	}
 
 	if (stat.Mode()&0111 == 0) {
-		output.Fail("bin/setup is not executable!")
-		output.Info("Make this file executable by running 'chmod +x bin/setup'.")
+		output.Fail("bin/setup is not executable!", 4)
+		output.Info("Make this file executable by running 'chmod +x bin/setup'.", 6)
 		return errors.New("bin/setup is not executable")
 	}
 
 
-	runner.Stream("bin/setup")
+	runner.Stream("bin/setup", 4)
 	return nil
 }

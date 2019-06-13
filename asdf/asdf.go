@@ -18,7 +18,7 @@ func CheckInstallation(name string, expectedVersion string) error {
 	tool := Tool{Name: name}
 
 	if !tool.checkForPlugin() {
-		output.Fail(fmt.Sprintf("Could not find the %s plugin for asdf", tool.Name))
+		output.Fail(fmt.Sprintf("Could not find the %s plugin for asdf", tool.Name), 4)
 		tool.installPlugin()
 	}
 
@@ -28,8 +28,8 @@ func CheckInstallation(name string, expectedVersion string) error {
 }
 
 func (tool Tool) installPlugin() {
-	output.Info(fmt.Sprintf("Adding plugin for %s to asdf.", tool.Name))
-	runner.StreamWithInfo("asdf plugin-add " + tool.Name)
+	output.Info(fmt.Sprintf("Adding plugin for %s to asdf.", tool.Name), 6)
+	runner.StreamWithInfo("asdf plugin-add " + tool.Name, 6)
 }
 
 func (tool Tool) ensureInstalled(expectedVersion string, attempted bool) error {
@@ -39,9 +39,9 @@ func (tool Tool) ensureInstalled(expectedVersion string, attempted bool) error {
 	}
 
 	errorMsg := fmt.Sprintf("You do not have %s (%s) installed.", tool.Name, expectedVersion)
-	output.Fail(errorMsg)
+	output.Fail(errorMsg, 2)
 	if (attempted) {
-		output.Fail("Prior installation attempt failed. Please try it yourself with 'asdf install'")
+		output.Fail("Prior installation attempt failed. Please try it yourself with 'asdf install'", 6)
 		return errors.New(fmt.Sprintf("Could not install %s (%s)", tool.Name, expectedVersion))
 	}
 	asdfTool.Install(expectedVersion)
@@ -87,7 +87,6 @@ func (t Tool) CheckInstalled(expectedVersion string) bool {
 
 func (t Tool) Install(version string ) {
 	installCommand := fmt.Sprintf("asdf install %s %s", t.Name, version)
-	output.Info("Attempting installation:")
-	output.Info("$ " + installCommand)
-	runner.Stream(installCommand)
+	output.Info("Attempting installation:", 4)
+	runner.StreamWithInfo(installCommand, 6)
 }

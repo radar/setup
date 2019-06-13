@@ -27,7 +27,7 @@ func (tool *Tool) SetExpectedVersion() error {
 		return err
 	}
 
-	output.Found(fmt.Sprintf("Found %s (%s) in .tool-versions", tool.Name, expectedVersion))
+	output.FoundTitle(fmt.Sprintf("Found %s (%s) in .tool-versions", tool.Name, expectedVersion), 2)
 	tool.ExpectedVersion = expectedVersion
 
 	return nil
@@ -59,7 +59,7 @@ func (tool Tool) Install() error {
 func (tool Tool) findExecutable() error {
 	err := runner.LookPath(tool.VersionCommand)
 	if err != nil {
-		output.Fail(fmt.Sprintf("Could not find %s executable in PATH", tool.Executable))
+		output.Fail(fmt.Sprintf("Could not find %s executable in PATH", tool.Executable), 4)
 		return err
 	}
 

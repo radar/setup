@@ -26,17 +26,21 @@ func Run(c *cli.Context) error {
 		return err
 	}
 
+	output.Separator()
+
 	if toolversions.Present() {
 		err = installTools()
 		if err != nil {
 			return err
 		}
 	} else {
-		output.Info("Could not find a .tool-versions file")
-		output.Info("Setup uses .tool-versions to determine what languages to install.")
-		output.Info("Please follow the ASDF instructions for creating a .tool-versions file.")
-		output.Info("https://asdf-vm.com/#/core-configuration?id=tool-versions")
+		output.Info("Could not find a .tool-versions file", 0)
+		output.Info("Setup uses .tool-versions to determine what languages to install.", 0)
+		output.Info("Please follow the ASDF instructions for creating a .tool-versions file.", 0)
+		output.Info("https://asdf-vm.com/#/core-configuration?id=tool-versions", 0)
 	}
+
+	output.Separator()
 
 	err = installGo()
 	if err != nil {
@@ -49,7 +53,7 @@ func Run(c *cli.Context) error {
 	}
 
 
-	output.Success("You're all good to go!")
+	output.Success("You're all good to go!", 0)
 
 	return nil
 }
@@ -60,7 +64,7 @@ func installTools() error {
 		return err
 	}
 
-	output.FancySuccess("Found a .tool-versions file, will check those packages are installed...", 0)
+	output.Success("Found a .tool-versions file, will check those packages are installed...", 0)
 
 	installers := make(map[string]installer)
 	installers["erlang"] = erlang.Run
@@ -76,9 +80,8 @@ func installTools() error {
 			if err != nil {
 				return err
 			}
-
 		} else {
-			output.Fail("I don't know how to install " + k + ". You're on your own!")
+			output.Fail("I don't know how to install " + k + ". You're on your own!", 2)
 		}
 	}
 

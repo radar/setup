@@ -12,7 +12,7 @@ func checkDependencies() error {
 	}
 
 
-	output.Info("Checking all Bundler dependencies are installed by running 'bundle check'...")
+	output.Info("Checking all Bundler dependencies are installed by running 'bundle check'...", 4)
 	runner.CheckForMessage(
 		"bundle check",
 		"The following gems are missing",
@@ -24,17 +24,16 @@ func checkDependencies() error {
 }
 
 func dependenciesInstalled() error {
-	output.Success("Bundler dependencies are installed.")
+	output.Success("Bundler dependencies are installed.", 6)
 	return nil
 }
 
 func installDependencies() error {
-	output.Fail("Gems are missing.")
-	output.Info("Attempting installation with:")
+	output.Fail("Gems are missing.", 4)
+	output.Info("Attempting installation with:", 6)
 
 	installCommand := "bundle install"
-	output.Info("$ " + installCommand)
-	runner.Stream(installCommand)
+	runner.StreamWithInfo(installCommand, 6)
 
 	return nil
 }

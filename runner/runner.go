@@ -1,7 +1,6 @@
 package runner
 
 import (
-	"fmt"
 	"strings"
 	"os/exec"
 	"bufio"
@@ -10,9 +9,9 @@ import (
 	"github.com/radar/setup/output"
 )
 
-func StreamWithInfo(command string) {
-	output.Info("$ " + command)
-	Stream(command)
+func StreamWithInfo(command string, padding output.Padding) {
+	output.Info("$ " + command, padding)
+	Stream(command, padding)
 }
 
 func Run(command string) (string, string, error) {
@@ -29,15 +28,15 @@ func Run(command string) (string, string, error) {
 	return stdout.String(), stderr.String(), nil
 }
 
-func Stream(command string) {
+func Stream(command string, padding output.Padding) {
 	cmd := buildCommand(command)
 	stdout, _ := cmd.StdoutPipe()
 	cmd.Start()
 	scanner := bufio.NewScanner(stdout)
 	scanner.Split(bufio.ScanLines)
 	for scanner.Scan() {
-			m := scanner.Text()
-			fmt.Println(m)
+		m := scanner.Text()
+		output.Info(m, padding)
 	}
 	cmd.Wait()
 }
@@ -47,8 +46,8 @@ type action func() error
 func CheckForMessage(command string, text string, success action, remedy action) {
 	stdout, _, err := attemptCommand(command)
 	if err != nil {
-		output.Fail("Command failed: " + command)
-		output.Info("Attempting a remedy...")
+		output.Fail("Command failed: " + command, 0)
+		output.Info("Attempting a remedy...", 0)
 		remedy()
 	}
 

@@ -13,22 +13,22 @@ func checkForMongoid() error {
 
 
 func checkForMongo() error {
-	output.Found("Found mongoid in the bundle.")
-	output.Info("Checking Mongo server is running...")
+	output.Found("Found mongoid in the bundle.", 6)
+	output.Info("Checking Mongo server is running...", 6)
 
 	return runner.OptionalAction("nc -z localhost 27017", mongoRunning, mongoNotRunning)
 }
 
 func mongoRunning() error {
-	output.Success("MongoDB is up and running at localhost:27017.")
+	output.Success("MongoDB is up and running at localhost:27017.", 8)
 	return nil
 }
 
 
 func mongoNotRunning() error {
-	output.Fail("MongoDB is not running at localhost:27017.")
-	output.Info("You may be able to start it with:")
-	output.Info("$ brew services start mongodb@3.4")
+	output.Fail("MongoDB is not running at localhost:27017.", 8)
+	output.Info("You may be able to start it with:", 10)
+	output.Info("$ brew services start mongodb@3.4", 10)
 
 	return errors.New("MongoDB is not running.")
 }

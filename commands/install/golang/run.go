@@ -11,8 +11,8 @@ func Used() bool {
 }
 
 func Run() error {
-	output.Found("This looks like a go project!")
-	output.Info("Running: go build")
-	runner.Stream("go build")
+	output.FoundTitle("This looks like a go project!", 2)
+	output.Info("Running: go build", 4)
+	runner.Stream("go build", 6)
 	return nil
 }
