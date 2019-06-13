@@ -6,6 +6,7 @@ import (
 	"github.com/radar/setup/toolversions"
 	"github.com/radar/setup/homebrew"
 
+	"github.com/radar/setup/commands/install/erlang"
 	"github.com/radar/setup/commands/install/elixir"
 	"github.com/radar/setup/commands/install/elm"
 	"github.com/radar/setup/commands/install/golang"
@@ -59,9 +60,10 @@ func installTools() error {
 		return err
 	}
 
-	output.Success("Found a .tool-versions file, will check those packages are installed...")
+	output.FancySuccess("Found a .tool-versions file, will check those packages are installed...", 0)
 
 	installers := make(map[string]installer)
+	installers["erlang"] = erlang.Run
 	installers["elixir"] = elixir.Run
 	installers["elm"] = elm.Run
 	installers["golang"] = golang.Run
