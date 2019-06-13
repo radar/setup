@@ -26,6 +26,9 @@ brew:
   # Default to project name
   name: setup
 
+  dependencies:
+    - asdf
+
   folder: Formula
 
   github:
