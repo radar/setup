@@ -12,9 +12,9 @@ type Checker struct {
 
 func (c Checker) Compare(name string) error {
 	if c.equal() {
-		output.Success(fmt.Sprintf("Correct %s version installed (%s)", name, c.Expected), 4)
+		output.Success(fmt.Sprintf("Correct %s version installed (%s)", name, c.Expected), 6)
 	} else {
-		output.Fail(fmt.Sprintf("Incorrect %s version installed: %s, was expecting %s", name, c.Actual, c.Expected), 4)
+		output.Fail(fmt.Sprintf("Incorrect %s version installed: %s, was expecting %s", name, c.Actual, c.Expected), 6)
 		return errors.New("Version comparison failed")
 	}
 
