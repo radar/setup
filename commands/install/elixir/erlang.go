@@ -15,7 +15,7 @@ func checkForErlang() error {
 }
 
 func erlangFound() error {
-	output.Found("Erlang is installed!", 6)
+	output.Success("Erlang is installed!", 6)
 	return nil
 }
 

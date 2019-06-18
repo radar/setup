@@ -7,11 +7,11 @@ import (
 
 
 func ensureHexPresent() {
-	output.Info("Ensuring Hex is present", 4)
-	runner.StreamWithInfo("mix local.hex --force", 6)
+	output.Info("Ensuring Hex is present", 6)
+	runner.StreamWithInfo("mix local.hex --force", 8)
 }
 
 func ensureRebarPresent() {
-	output.Info("Ensuring Rebar is present", 4)
-	runner.StreamWithInfo("mix local.rebar --force", 6)
+	output.Info("Ensuring Rebar is present", 6)
+	runner.StreamWithInfo("mix local.rebar --force", 8)
 }

@@ -33,6 +33,7 @@ func Run() (err error) {
 		return err
 	}
 
+	output.Info("Installing hex + rebar (used for installing Elixir packages)", 4)
 	ensureHexPresent()
 	ensureRebarPresent()
 
