@@ -17,6 +17,8 @@ type Tool struct {
 func CheckInstallation(name string, expectedVersion string) error {
 	tool := Tool{Name: name}
 
+	output.Info(fmt.Sprintf("Checking if %s (%s) is installed...", name, expectedVersion), 4)
+
 	if !tool.checkForPlugin() {
 		output.Fail(fmt.Sprintf("Could not find the %s plugin for asdf", tool.Name), 4)
 		tool.installPlugin()

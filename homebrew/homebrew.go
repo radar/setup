@@ -27,7 +27,7 @@ func bundleInstalled() error {
 
 func bundleNotInstalled() error {
 	output.Info("Homebrew bundle not installed. You might want to check the output of 'brew bundle check'", 4)
-	output.Info("Alternatively, you could run 'brew bundle install' to install the dependencies listed in the Brewfile")
+	output.Info("Alternatively, you could run 'brew bundle install' to install the dependencies listed in the Brewfile", 4)
 
 	return nil
 }
